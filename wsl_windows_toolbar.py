@@ -43,9 +43,12 @@ DEFAULT_HOST_MOUNTPOINT = "/mnt/c"
 if os.path.exists(PROC_MOUNTS):
     with open(PROC_MOUNTS) as mount_fh:
         for mount in mount_fh.readlines():
-            fs, mp, typ, opts, dump, pas = mount.rstrip().split()
-            if typ in ["drvfs", "9p"]:
-                DEFAULT_HOST_MOUNTPOINT = mp
+            try:
+                fs, mp, typ, opts, dump, pas = mount.rstrip().split()
+                if typ in ["drvfs", "9p"]:
+                    DEFAULT_HOST_MOUNTPOINT = mp
+            except:
+                pass
 
 WINDOWS_USERPROFILE = subprocess.check_output(
     ["cmd.exe", "/C", "echo", "%USERPROFILE%"],
